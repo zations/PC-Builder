@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .add-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Available videocards</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>G3Mark</th>
+            <th>G2Mark</th>
+            <th>TDP</th>
+            <th>Price</th>
+            <th>Add</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for gpu in Gpus %}
+        <tr>
+            <td>{{ gpu.name }}</td>
+            <td>{{ gpu.G3mark }}</td>
+            <td>{{ gpu.G2mark }} </td>
+            <td>{{ gpu.Tdp }}</td>
+            <td>{{ gpu.Price }}</td>
+            <td>
+                <form method="POST" action="{% url 'save_gpu_selection' gpu.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Add CPU</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAM List</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Share Tech Mono', monospace;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            padding: 40px;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            color: #00ffcc;
+            text-shadow: 0 0 10px #00ffcc;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(10, 10, 40, 0.85);
+            border-radius: 12px;
+            box-shadow: 0 0 25px #00c3ff66;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background-color: #00334e;
+            text-transform: uppercase;
+            font-size: 13px;
+            color: #fff;
+        }
+
+        td {
+            color: #eee;
+        }
+
+        tr:hover {
+            background-color: #002233;
+        }
+
+        button {
+            background: linear-gradient(145deg, #00ffff, #0066ff);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            box-shadow: 0 0 15px #00ffffaa;
+            transition: transform 0.2s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px #00ffff;
+        }
+
+        form {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Available RAM</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Speed</th>
+            <th>Modules</th>
+            <th>CAS Latency</th>
+            <th>First Word Latency</th>
+            <th>Benchmark</th>
+            <th>Add</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ram in Rams %}
+        <tr>
+            <td>{{ ram.name }}</td>
+            <td>{{ ram.speed }} MHz</td>
+            <td>{{ ram.modules }}</td>
+            <td>{{ ram.cas_latency }}</td>
+            <td>{{ ram.first_word_latency }}</td>
+            <td>{{ ram.benchmark }}</td>
+            <td>
+                <form method="POST" action="{% url 'save_ram' ram.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Add RAM</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

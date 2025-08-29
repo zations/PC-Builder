@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %} 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'pc/style2.css' %}">
+    <title>Build Success</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            font-family: 'Share Tech Mono', monospace;
+            padding: 50px;
+            text-align: center;
+        }
+    
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            color: #00ffcc;
+            text-shadow: 0 0 10px #00ffcc;
+        }
+    
+        h3 {
+            color: #ffcc00;
+            margin-top: 40px;
+            text-shadow: 0 0 5px #ffcc00;
+        }
+    
+        .stats {
+            font-size: 18px;
+            margin: 20px auto;
+            width: 50%;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px #00ffff44;
+        }
+    
+        .stats p {
+            margin: 10px 0;
+            color: #aaffff;
+        }
+    
+        table.component-summary {
+            margin: 30px auto;
+            width: 90%;
+            border-collapse: collapse;
+            background-color: #111;
+            box-shadow: 0 0 20px #00ffff44;
+            border: 2px solid #00c3ff;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+    
+        .component-summary th, .component-summary td {
+            padding: 14px;
+            border: 1px solid #00c3ff44;
+            color: #ffffff;
+        }
+    
+        .component-summary th {
+            background-color: #00334d;
+            color: #00ffff;
+            text-shadow: 0 0 5px #00ffffaa;
+            font-family: 'Orbitron', sans-serif;
+        }
+    
+        .component-summary td {
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+        }
+    
+        .component-summary tr:hover td {
+            background-color: #002b40;
+        }
+    
+        .glow-check {
+            font-size: 60px;
+            color: #00ff00;
+            text-shadow: 0 0 20px #00ff00aa;
+            margin-bottom: 20px;
+        }
+    
+        .compatibility-report {
+            margin-top: 15px;
+            color: #ffaaff;
+            font-size: 16px;
+            background-color: #1a1a2f;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #aa00ff55;
+        }
+        
+    </style>
+    
+</head>
+<body style="  overflow-x: hidden;">
+   
+
+    <div class="glow-check">✔</div>
+
+    <h2>Your PC Build Is Ready!</h2>
+
+    <div class="stats">
+        <p><strong>⚙️ Performance Score:</strong> {{ performance_score }}</p>
+        <p><strong>❄️ Cooling Recommendations:</strong> {{ cooling_recommendations }}</p>
+        <p><strong>⚡ Power Required:</strong> {{ total_power }} W</p>
+    </div>
+
+    <table class="component-summary">
+        <thead>
+            <tr>
+                <th>Component</th>
+                <th>Selection</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>CPU</td><td>{{ pc_build.selected_cpu }}</td></tr>
+            <tr><td>CPU Cooler</td><td>{{ pc_build.selected_cpu_cooler }}</td></tr>
+            <tr><td>Motherboard</td><td>{{ pc_build.selected_motherboard }}</td></tr>
+            <tr><td>Memory</td><td>{{ pc_build.selected_ram }}</td></tr>
+            <tr><td>Storage</td><td>{{ pc_build.selected_storage }}</td></tr>
+            <tr><td>Video Card</td><td>{{ pc_build.selected_gpu }}</td></tr>
+            <tr><td>Case</td><td>{{ pc_build.selected_case }}</td></tr>
+            <tr><td>Power Supply</td><td>{{ pc_build.selected_psu }}</td></tr>
+            <tr><td>OS</td><td>{{ pc_build.selected_os }}</td></tr>
+            <tr><td>Monitor</td><td>{{ pc_build.selected_monitor }}</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Compatibility Report</h3>
+    <div class="compatibility-report">
+        {{ compatibility_report }}
+    </div>
+<!-- Chat Toggle Button -->
+<div id="chat-icon" onclick="toggleChat()">
+    💬
+  </div>
+  
+  Chat Popup
+  <div id="chat-popup">
+    <div id="chat-header">Ask me anything!</div>
+    <div id="chat-messages"></div>
+    <input type="text" id="chat-input" placeholder="Type your question..." onkeydown="handleChatKey(event)">
+  </div>
+
+  
+  <div id="savebuild">
+    <form id="saveform" method="post" action= "{%url 'save_build' %}" style="display: none;">
+      
+      {% csrf_token %}
+      <input type="hidden" id="buildNameInput" name="build_name">
+    </form>
+    <button type="submit"  onclick="openModal()">Save Build</button>
+
+    <div id="saveModal" style="display: none; position: fixed; top: 30%; left: 50%; transform: translate(-50%, -30%);  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); padding: 20px; border: 2px solid black; border-radius: 10px; text-align: center;">
+        <h3>Enter Your Build Name</h3>
+        <input type="text" id="buildNameField" placeholder="e.g. Gaming Beast" style="padding: 5px; color: white; background-color: #000;">
+        <br><br>
+        <button onclick="submitForm()" class="btn btn-success">Save</button>
+        <button onclick="closeModal()" class="btn btn-danger">Cancel</button>
+    </div>
+    
+    
+  </div>
+  
+  <style>
+    button {
+            background: linear-gradient(145deg, #00ffff, #0066ff);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            box-shadow: 0 0 15px #00ffffaa;
+            transition: transform 0.2s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+    
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 25px #00ffff;
+    }
+    #chat-icon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #333;
+      color: white;
+      font-size: 28px;
+      padding: 10px 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 9999;
+    }
+  
+    #chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 300px;
+      height: 400px;
+      background: #1f1f1f;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #000;
+      z-index: 9999;
+      color: white;
+      overflow: hidden;
+      flex-direction: column;
+    }
+  
+    #chat-header {
+      background: #444;
+      padding: 10px;
+      font-weight: bold;
+      text-align: center;
+    }
+  
+    #chat-messages {
+        padding: 10px;
+        height: 310px;
+        overflow-y: auto;
+        font-size: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px; /* Adds vertical spacing between messages */
+    }
+
+    .message {
+      text-align: left;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+  
+    #chat-input {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      outline: none;
+      background: #333;
+      color: white;
+      font-size: 14px;
+    }
+    #savebuild{
+      position: relative;
+      top: -755px;
+      right: -550px;
+
+    }
+  </style>
+
+
+  
+  <script>
+    function openModal() {
+    document.getElementById('saveModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('saveModal').style.display = 'none';
+    }
+
+    function submitForm() {
+        var buildName = document.getElementById('buildNameField').value;
+        if (buildName.trim() === "") {
+            alert("Please enter a name for your build!");
+            return;
+        }
+        document.getElementById('buildNameInput').value = buildName;  // Put the name into the hidden form input
+        document.getElementById('saveform').submit();  // Submit the form
+    }
+    // function toggleChat() {
+    //   const popup = document.getElementById("chat-popup");
+    //   popup.style.display = popup.style.display === "none" ? "flex" : "none";
+    // }
+  
+    // function handleChatKey(e) {
+    //   if (e.key === "Enter") {
+    //     const input = document.getElementById("chat-input");
+    //     const message = input.value.trim();
+    //     if (message !== "") {
+    //       appendMessage("You", message);
+    //       sendToGroq(message);
+    //       input.value = "";
+    //     }
+    //   }
+    // }
+  
+    // function appendMessage(sender, msg) {
+    //   const container = document.getElementById("chat-messages");
+    //   const div = document.createElement("div");
+    //   div.innerHTML = `<strong>${sender}:</strong> ${msg}`;
+    //   container.appendChild(div);
+    //   container.scrollTop = container.scrollHeight;
+    // }
+  
+    // function sendToGroq(message) {
+    //   fetch("/ask/", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "X-CSRFToken": getCookie("csrftoken"),
+    //     },
+    //     body: JSON.stringify({ question: message })
+    //   })
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     appendMessage("Bot", data.answer || "No response.");
+    //   })
+    //   .catch(err => {
+    //     appendMessage("Bot", "Error connecting to server.");
+    //     console.error("Error:", err);
+    //   });
+    // }
+  
+    // function getCookie(name) {
+    //   let cookieValue = null;
+    //   if (document.cookie && document.cookie !== "") {
+    //     const cookies = document.cookie.split(";");
+    //     for (let cookie of cookies) {
+    //       const trimmed = cookie.trim();
+    //       if (trimmed.startsWith(name + "=")) {
+    //         cookieValue = decodeURIComponent(trimmed.substring(name.length + 1));
+    //         break;
+    //       }
+    //     }
+    //   }
+    //   return cookieValue;
+    // }
+    function toggleChat() {
+      const popup = document.getElementById("chat-popup");
+      popup.style.display = popup.style.display === "none" ? "flex" : "none";
+    }
+
+    function handleChatKey(e) {
+      if (e.key === "Enter") {
+        const input = document.getElementById("chat-input");
+        const message = input.value.trim();
+        if (message !== "") {
+          appendMessage("You", message);
+          sendToOllama(message);
+          input.value = "";
+        }
+      }
+    }
+
+    function appendMessage(sender, msg) {
+      const container = document.getElementById("chat-messages");
+      const div = document.createElement("div");
+      div.className = "message";
+      div.innerHTML = `<strong>${sender}:</strong> ${msg}`;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function sendToOllama(message) {
+      fetch("/ask_ollama/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({ question: message })
+      })
+      .then(res => res.json())
+      .then(data => {
+        appendMessage("Bot", data.answer || "No response.");
+      })
+      .catch(err => {
+        appendMessage("Bot", "Error connecting to server.");
+        console.error("Error:", err);
+      });
+    }
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let cookie of cookies) {
+          const trimmed = cookie.trim();
+          if (trimmed.startsWith(name + "=")) {
+            cookieValue = decodeURIComponent(trimmed.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,106 @@
+Table: pcpicker_cpu
+Stores CPU specifications such as performance, power, and compatibility.
+id: Unique identifier for the CPU.
+name: Model name of the CPU.
+cpu_mark: Performance benchmark score.
+socket: Socket type supported (e.g., AM4, LGA1200).
+cores: Number of cores in the CPU.
+tdp: Thermal Design Power in watts.
+
+Table: pcpicker_gpu
+Stores GPU specifications including 2D/3D performance and power usage.
+id: Unique identifier for the GPU.
+name: Model name of the GPU.
+G3mark: 3D performance benchmark score.
+G2mark: 2D performance benchmark score.
+Tdp: Thermal Design Power in watts.
+
+Table: pcpicker_cpucooler
+Details about CPU coolers and their supported configurations.
+id: Unique identifier for the CPU cooler.
+name: Model name of the cooler.
+fan_size: Fan size in millimeters.
+noise_level: Noise level in decibels.
+socket_compatibility: Compatible CPU socket types.
+rpm_range: Fan speed range in RPM.
+cooler_type: Type of cooler (air, liquid, etc.).
+tdp: Cooling capacity in watts.
+benchmark: Performance rating of the cooler.
+fan_count: Number of fans included.
+
+Table: pcpicker_monitor
+Information about monitors including display specs and performance.
+id: Unique identifier for the monitor.
+name: Monitor model name.
+screen_size: Diagonal screen size in inches.
+resolution: Display resolution (e.g., 1920x1080).
+refresh_rate: Refresh rate in hertz.
+response_time: Time taken to switch pixels in milliseconds.
+panel_type: Display panel type (e.g., IPS, TN).
+aspect_ratio: Ratio of width to height (e.g., 16:9).
+benchmark: Display performance score.
+
+Table: pcpicker_motherboard
+Motherboard specifications covering CPU support and memory capacity.
+id: Unique identifier for the motherboard.
+name: Model name of the motherboard.
+socket_cpu: CPU socket supported.
+form_factor: Physical size (e.g., ATX, Micro-ATX).
+memory_max: Maximum RAM supported.
+color: Motherboard color theme.
+benchmark: Performance score.
+memory_slots: Total RAM slots available.
+
+Table: pcpicker_operatingsystem
+Operating system specifications including supported memory and mode.
+id: Unique identifier for the OS.
+name: OS name/version.
+mode: Operating mode (e.g., 64-bit).
+max_supported_memory: Maximum memory supported by the OS.
+benchmark: OS performance benchmark score.
+
+Table: pcpicker_powersupply
+Specifications for power supply units (PSUs).
+id: Unique identifier for the PSU.
+name: Model name of the PSU.
+psu_type: Type of PSU (e.g., modular, non-modular).
+efficiency_rating: Power efficiency (e.g., 80+ Gold).
+wattage: Total power output in watts.
+modular: Whether PSU is modular (Yes/No).
+color: Color of the PSU.
+benchmark: PSU performance score.
+
+Table: pcpicker_ram
+RAM module details including speed and latency.
+id: Unique identifier for the RAM module.
+name: Model name of the RAM.
+speed: Operating speed of RAM (e.g., 3200MHz).
+modules: Number of RAM sticks in kit.
+price_per_gb: Cost per GB.
+color: RAM color.
+first_word_latency: Latency in nanoseconds.
+cas_latency: CAS latency value.
+benchmark: RAM performance score.
+
+Table: pcpicker_storage
+Specifications for storage devices like SSDs and HDDs.
+id: Unique identifier for the storage.
+name: Model name of the device.
+capacity: Storage capacity (e.g., 1TB).
+storage_type: Type of storage (SSD, HDD).
+cache: On-device cache size.
+form_factor: Physical size (e.g., 2.5", M.2).
+interface: Interface type (e.g., SATA, NVMe).
+benchmark: Storage performance score.
+
+Table: pcpicker_case
+Specifications for PC cases including size and cooling potential.
+id: Unique identifier for the case.
+name: Model name of the case.
+case_type: Form type (e.g., Mid-Tower).
+color: Color of the case.
+power_supply: PSU compatibility details.
+side_panel: Type of side panel (e.g., tempered glass).
+external_volume: Outer volume of the case.
+benchmark: Cooling or build score.
+internal_bays: Number of internal drive bays.

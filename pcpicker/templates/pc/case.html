@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case List</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Share Tech Mono', monospace;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            padding: 40px;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            color: #00fff2;
+            text-shadow: 0 0 10px #00fff2;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(15, 15, 25, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 0 30px #ff00cc55;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background-color: #2c003e;
+            text-transform: uppercase;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        td {
+            color: #eee;
+        }
+
+        tr:hover {
+            background-color: #1e1e28;
+        }
+
+        button {
+            background: linear-gradient(145deg, #ff00cc, #3333ff);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            box-shadow: 0 0 15px #ff00ccaa;
+            transition: transform 0.2s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px #ff00cc;
+        }
+
+        form {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Available Cases</h2>
+    <div>
+        <select id="searchType">
+          <option value="0">Name</option>
+          <option value="1">Case Type</option>
+          <option value="2">Color</option>
+          <option value="3">Power supply</option>
+          <option value="4">Side pannel</option>
+          <option value="5">Internal bays</option>
+          <option value="6">Benchmark</option>
+          
+        </select>
+        <input type="text" id="caseSearchInput" onkeyup="filterCPUs()" placeholder="Search...">
+    </div>
+
+
+    <table id="caseTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Case Type</th>
+                <th>Color</th>
+                <th>Power Supply</th>
+                <th>Side Panel</th>
+                <th>Internal Bays</th>
+                <th>Benchmark</th>
+                <th>Add</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for case in Cases %}
+            <tr>
+                <td>{{ case.name }}</td>
+                <td>{{ case.case_type }}</td>
+                <td>{{ case.color }}</td>
+                <td>{{ case.power_supply }}</td>
+                <td>{{ case.side_panel }}</td>
+                <td>{{ case.internal_bays }}</td>
+                <td>{{ case.benchmark }}</td>
+                <td>
+                    <form method="POST" action="{% url 'save_case' case.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Add Case</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+
+<script>
+    function filterCPUs() {
+        const input = document.getElementById("caseSearchInput").value.toLowerCase();
+        const filterColumnIndex = parseInt(document.getElementById("searchType").value);
+        const table = document.getElementById("caseTable");
+        const rows = table.getElementsByTagName("tr");
+    
+        let matchFound = false;
+    
+        for (let i = 1; i < rows.length; i++) {
+            const td = rows[i].getElementsByTagName("td")[filterColumnIndex];
+            if (td) {
+                const txtValue = td.textContent || td.innerText;
+                const isMatch = txtValue.toLowerCase().includes(input);
+                rows[i].style.display = isMatch ? "" : "none";
+                if (isMatch) matchFound = true;
+            }
+        }
+    
+        document.getElementById("noResultsMessage").style.display = matchFound ? "none" : "block";
+    }
+    </script>
+</html>

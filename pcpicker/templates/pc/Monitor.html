@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor List</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Share Tech Mono', monospace;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            padding: 40px;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            color: #00fff2;
+            text-shadow: 0 0 10px #00fff2;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(15, 15, 25, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 0 30px #ff00cc55;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background-color: #2c003e;
+            text-transform: uppercase;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        td {
+            color: #eee;
+        }
+
+        tr:hover {
+            background-color: #1e1e28;
+        }
+
+        button {
+            background: linear-gradient(145deg, #ff00cc, #3333ff);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            box-shadow: 0 0 15px #ff00ccaa;
+            transition: transform 0.2s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px #ff00cc;
+        }
+
+        form {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Available Monitors</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Screen Size</th>
+                <th>Resolution</th>
+                <th>Refresh Rate</th>
+                <th>Response Time</th>
+                <th>Panel Type</th>
+                <th>Benchmark</th>
+                <th>Add</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for monitor in Monitors %}
+            <tr>
+                <td>{{ monitor.name }}</td>
+                <td>{{ monitor.screen_size }}</td>
+                <td>{{ monitor.resolution }}</td>
+                <td>{{ monitor.refresh_rate }}</td>
+                <td>{{ monitor.response_time }}</td>
+                <td>{{ monitor.panel_type }}</td>
+                <td>{{ monitor.benchmark }}</td>
+                <td>
+                    <form method="POST" action="{% url 'save_Monitor' monitor.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Add Monitor</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Share Tech Mono', monospace;
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        color: #e0e0e0;
+        padding: 40px;
+      }
+  
+      h2 {
+        font-size: 36px;
+        color: #00fff2;
+        text-shadow: 0 0 10px #00fff2;
+        margin-bottom: 30px;
+      }
+  
+      form {
+        max-width: 400px;
+        margin: 0 auto;
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px #ff00cc55;
+      }
+  
+      label {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 18px;
+        color: #fff;
+      }
+  
+      input[type="text"],
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        background-color: #1e1e2f;
+        color: #fff;
+        margin-bottom: 20px;
+        font-size: 16px;
+      }
+  
+      button {
+        width: 100%;
+        background: linear-gradient(145deg, #ff00cc, #3333ff);
+        border: none;
+        padding: 10px;
+        border-radius: 10px;
+        color: #fff;
+        font-weight: bold;
+        box-shadow: 0 0 15px #ff00ccaa;
+        cursor: pointer;
+        transition: 0.3s ease;
+      }
+  
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 25px #ff00cc;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <h2>Register</h2>
+    <form method="post">
+      {% csrf_token %}
+      <label for="name">Name:</label>
+      {{ form.name }}
+      
+      <label for="email">Email:</label>
+      {{ form.email }}
+      
+      <label for="password">Password:</label>
+      {{ form.password }}
+      
+      <button type="submit">Register</button>
+    </form>
+  </body>
+  
+</html>

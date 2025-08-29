@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU List</title>
+
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Share Tech Mono', monospace;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            padding: 40px;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            color: #00fff2;
+            text-shadow: 0 0 10px #00fff2;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(15, 15, 25, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 0 30px #ff00cc55;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background-color: #2c003e;
+            text-transform: uppercase;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        td {
+            color: #eee;
+        }
+
+        tr:hover {
+            background-color: #1e1e28;
+        }
+
+        button {
+            background: linear-gradient(145deg, #ff00cc, #3333ff);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            box-shadow: 0 0 15px #ff00ccaa;
+            transition: transform 0.2s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px #ff00cc;
+        }
+
+        form {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Available CPUs</h2>
+    <div>
+        <select id="searchType">
+            <option value="0">Name</option>
+            <option value="1">CPU Mark</option>
+            <option value="2">TDP</option>
+            <option value="3">Socket</option>
+            <option value="4">Cores</option>
+        </select>
+        <input type="text" id="cpuSearchInput" onkeyup="filterCPUs()" placeholder="Search...">
+    </div>
+    
+    <input type="checkbox" id="toggleCpuSource"> Toggle Live Data
+            
+            
+    <table id="cpuTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>CPU Mark</th>
+                <th>TDP</th>
+                <th>Socket</th>
+                <th>Cores</th>
+                <th>Select</th>
+            </tr>
+        </thead>
+        <tbody id="cpuTableBody">
+            
+            {% for cpu in cpus %}
+            <tr>
+                <td>{{ cpu.name }}</td>
+                <td>{{ cpu.cpu_mark }}</td>
+                <td>{{ cpu.tdp }} W</td>
+                <td>{{ cpu.socket }}</td>
+                <td>{{ cpu.cores }}</td>
+                <td>
+                    <form method="POST" action="{% url 'save_cpu_selection' cpu.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Add CPU</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+           
+        </tbody>
+        <script>
+            const checkbox = document.getElementById('toggleCpuSource');
+            const tbody = document.getElementById('cpuTableBody');
+
+            function render(cpus){
+                
+                
+                const rows = tbody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    tbody.innerHTML=''});
+                cpus.forEach(cpu => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${cpu.name}</td>
+                        <td>${cpu.cpu_mark}</td>
+                        <td>${cpu.tdp} W</td>
+                        <td>${cpu.socket}</td>
+                        <td>${cpu.cores}</td>
+                        
+                        
+                      
+                    
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            function getdata(useLive){
+                const url = useLive ? '/get_live_cpu/' : '/get_normal_cpu/';
+                 fetch(url)
+                    .then(r => r.json())
+                    .then(data => render(data.cpus))
+             }
+            
+             checkbox.addEventListener('change', () => {
+                getdata(checkbox.checked);
+            });
+
+            // initial load = normal DB
+            getData(false);
+
+        </script>
+    </table>
+
+    
+
+    <script>
+           
+                
+            
+    
+        
+    
+
+        
+        function filterCPUs() {
+            const input = document.getElementById("cpuSearchInput").value.toLowerCase();
+            const filterColumnIndex = parseInt(document.getElementById("searchType").value);
+            const table = document.getElementById("cpuTable");
+            const rows = table.getElementsByTagName("tr");
+        
+            let matchFound = false;
+        
+            for (let i = 1; i < rows.length; i++) {
+                const td = rows[i].getElementsByTagName("td")[filterColumnIndex];
+                if (td) {
+                    const txtValue = td.textContent || td.innerText;
+                    const isMatch = txtValue.toLowerCase().includes(input);
+                    rows[i].style.display = isMatch ? "" : "none";
+                    if (isMatch) matchFound = true;
+                }
+            }
+        
+            document.getElementById("noResultsMessage").style.display = matchFound ? "none" : "block";
+        }
+        </script>
+</body>
+
+</html>

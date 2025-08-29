@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Saved Builds</title>
+
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Share Tech Mono', monospace;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            padding: 40px;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            color: #00fff2;
+            text-shadow: 0 0 10px #00fff2;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .build-card {
+            background-color: rgba(15, 15, 25, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 0 30px #ff00cc55;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .build-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 40px #ff00ccaa;
+        }
+
+        .build-card h3 {
+            color: #00fff2;
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 15px;
+        }
+
+        .build-card p {
+            color: #eee;
+            margin: 5px 0;
+        }
+
+    </style>
+</head>
+<body>
+
+<h2>Your Saved Builds</h2>
+
+{% if saved_builds %}
+    {% for build in saved_builds %}
+        <div class="build-card">
+            <h3>{{ build.build_name }}</h3>  <!-- Build Name -->
+            <p><strong>CPU:</strong> {{ build.selected_cpu }}</p>
+            <p><strong>GPU:</strong> {{ build.selected_gpu }}</p>
+            <p><strong>RAM:</strong> {{ build.selected_ram }}</p>
+            <p><strong>Storage:</strong> {{ build.selected_storage }}</p>
+            <p><strong>Performance Score:</strong> {{ build.performance_score }}</p>
+            <p><strong>Saved On:</strong> {{ build.created_at }}</p>
+            <p>
+                <form method="GET" action="{% url 'load_build' build.id %}">
+                    <button type="submit">View</button>
+                </form>
+                
+            </p>
+        </div>
+    {% endfor %}
+{% else %}
+    <p style="text-align: center;">No builds saved yet!</p>
+{% endif %}
+
+</body>
+</html>
